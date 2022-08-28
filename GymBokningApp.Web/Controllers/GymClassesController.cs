@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymBokningApp.Core.Entities;
 using GymBokningApp.Data.Data;
+using GymBokningApp.Web.Models;
+using System.Diagnostics;
 
 namespace GymBokningApp.Web.Controllers
 {
@@ -161,6 +163,12 @@ namespace GymBokningApp.Web.Controllers
         private bool GymClassExists(int id)
         {
           return (_context.GymClasses?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

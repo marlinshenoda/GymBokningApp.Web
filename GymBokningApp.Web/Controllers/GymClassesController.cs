@@ -6,17 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymBokningApp.Core.Entities;
-using GymBokningApp.Web.Data;
+using GymBokningApp.Data.Data;
 
 namespace GymBokningApp.Web.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+    //    private readonly UserManager<ApplicationUser> userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context/*, UserManager<ApplicationUser> userManager*/)
         {
             _context = context;
+        //    this.userManager = userManager;
+
         }
 
         // GET: GymClasses

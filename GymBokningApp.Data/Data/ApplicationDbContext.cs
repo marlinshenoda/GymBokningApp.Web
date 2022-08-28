@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace GymBokningApp.Web.Data
+namespace GymBokningApp.Data.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

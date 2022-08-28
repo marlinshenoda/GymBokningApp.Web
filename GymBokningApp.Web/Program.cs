@@ -1,5 +1,5 @@
 using GymBokningApp.Core.Entities;
-using GymBokningApp.Web.Data;
+using GymBokningApp.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

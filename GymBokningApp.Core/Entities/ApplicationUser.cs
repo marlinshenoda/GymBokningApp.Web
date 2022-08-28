@@ -17,7 +17,7 @@ namespace GymBokningApp.Core.Entities
         public string LastName { get; set; }
         public string FullName { get { return $"{FirstName} {LastName}"; } }
         public DateTime TimeOfRegistration { get; set; }
-        public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; }
+        public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; }=new List<ApplicationUserGymClass>();
 
     }
 }

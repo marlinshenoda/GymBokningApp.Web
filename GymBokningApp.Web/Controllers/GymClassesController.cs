@@ -9,29 +9,97 @@ using GymBokningApp.Core.Entities;
 using GymBokningApp.Data.Data;
 using GymBokningApp.Web.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymBokningApp.Web.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
-    //    private readonly UserManager<ApplicationUser> userManager;
+       private readonly UserManager<ApplicationUser> userManager;
+       // private readonly IUnitOfWork uow;
 
-        public GymClassesController(ApplicationDbContext context/*, UserManager<ApplicationUser> userManager*/)
+
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-        //    this.userManager = userManager;
+            this.userManager = userManager;
+           // this.uow = uow;
 
         }
 
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-              return _context.GymClasses != null ? 
-                          View(await _context.GymClasses.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.GymClasses'  is null.");
+            return View(await _context.GymClasses.ToListAsync());
         }
 
+        public async Task<IActionResult> BookingToggle(int? id)
+        {
+            //if (id is null) return BadRequest();
+
+            ////var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var userId = userManager.GetUserId(User);
+
+            //if (userId == null) return BadRequest();
+
+            //var attending = await uow.UserGymRepository.FindAsync(userId, (int)id);
+
+            //if (attending == null)
+            //{
+            //    var booking = new ApplicationUserGymClass
+            //    {
+            //        ApplicationUserId = userId,
+            //        GymClassId = (int)id
+            //    };
+
+            //    uow.UserGymRepository.Add(booking);
+
+            //    // db.AppUserGyms.Add(booking);
+            //}
+            //else
+            //{
+            //    uow.UserGymRepository.Remove(attending);
+            //    //db.AppUserGyms.Remove(attending);
+            //}
+
+            //await db.SaveChangesAsync();
+
+            //return RedirectToAction("Index");  if (id == null) return NotFound();
+            if (id == null) return NotFound();
+
+            else
+            {
+                //this user is logged in             
+                //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userId = userManager.GetUserId(User);
+                //which class?
+                var gymClass = await _context.GymClasses.FirstOrDefaultAsync(g => g.Id == id);
+
+                //logged user is on this class 
+                var b = await _context.ApplicationUserGymClass.FirstOrDefaultAsync(t => t.ApplicationUserId == userId && t.GymClassId == id);
+
+                //user is not on this class: add user to this class (add into ApplicationUserGymClass db)
+                if (b == null)
+                {
+                    var classAndMember = new ApplicationUserGymClass
+                    {
+                        ApplicationUser = _context.Users.ToList().FirstOrDefault(u => u.Id == userId),
+                        GymClass = gymClass,
+                    };
+                    _context.ApplicationUserGymClass.Add(classAndMember);
+                }
+                else
+                {
+                    _context.ApplicationUserGymClass.Remove(b);
+                }
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", new { id = gymClass.Id });
+
+
+            }
+        }
         // GET: GymClasses/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GymBokningApp.Data.Migrations
 {
-    public partial class data : Migration
+    public partial class seeddata : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
